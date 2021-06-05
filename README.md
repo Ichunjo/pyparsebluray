@@ -1,5 +1,10 @@
 # pyparsebluray
 
+Parse and extract binary data from bluray files
+
+
+# Example
+
 ```py
 import os
 import pprint
