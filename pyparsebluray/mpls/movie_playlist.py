@@ -43,10 +43,12 @@ class MplsObject(ABC):
         return self.mpls.tell()
 
     def _unpack_byte(self, n: int) -> Tuple[Any, ...]:
-        # Size 1 -> big-endian unsigned char
-        # Size 2 -> big-endian unsigned short
-        # Size 4 -> big-endian unsigned int
-        # Size 8 -> big-endian unsigned long long
+        """
+            Size 1 -> big-endian unsigned char
+            Size 2 -> big-endian unsigned short
+            Size 4 -> big-endian unsigned int
+            Size 8 -> big-endian unsigned long long
+        """
         formats: Dict[int, str] = {1: '>B', 2: '>H', 4: '>I', 8: '>Q'}
         return unpack(formats[n], self.mpls.read(n))
 
