@@ -17,12 +17,23 @@ class MplsObject(ABC):
         self.mpls = mpls
         super().__init__()
 
-    # TODO:
-    # def __repr__(self) -> str:
-    #     out = ''
-    #     for k, v in self.__dict__.items():
-    #         out += f'{k}: {v}\n'
-    #     return out
+    def __repr__(self) -> str:
+        try:
+            from prettyprinter import pretty_call, pretty_repr, register_pretty
+            from prettyprinter.doc import Doc
+            from prettyprinter.prettyprinter import PrettyContext
+
+            @register_pretty(MplsObject)
+            def _repr(value: object, ctx: PrettyContext) -> Doc:
+                dic = vars(value)
+                del dic['mpls']
+                return pretty_call(ctx, MplsObject, dic)
+
+            return pretty_repr(self)
+        except ImportError:
+            from pprint import pformat
+
+            return pformat(vars(self), sort_dicts=False)
 
     @abstractmethod
     def load(self):
