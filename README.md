@@ -23,6 +23,7 @@ with open('/BD-ROM/BDMV/PLAYLIST/00001.mpls', 'rb') as mpls_file:
 
 # TODO
 * Add clpi, index table and movie object
+* Better printing 
 
 
 # Credits
