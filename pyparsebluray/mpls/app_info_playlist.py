@@ -23,7 +23,7 @@ class AppInfoPlaylist(MplsObject):
 
         if self.length != 0:
             self.playback_type, = self._unpack_byte(1)                                 # 1 byte - 8 bits
-            if self.playback_type in {int(0x02), int(0x03)}:
+            if self.playback_type in {0x02, 0x03}:
                 self.playback_count, = self._unpack_byte(2)                            # 2 bytes - 16 bits
             else:
                 self.mpls.read(2)                                                            # 2 bytes - 16 bits - Reserved

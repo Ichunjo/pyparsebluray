@@ -26,17 +26,17 @@ class StreamEntry(MplsObject):
         if self.length != 0:
             self.stream_type, = self._unpack_byte(1)                            # 1 byte - 8 bits
 
-            if self.stream_type == int(0x01):
+            if self.stream_type == 0x01:
                 ref, = self._unpack_byte(2)                                     # 2 bytes - 16 bits
                 self.ref_to_stream_pid = '0x{:<04x}'.format(ref)
 
-            elif self.stream_type == int(0x02):
+            elif self.stream_type == 0x02:
                 self.ref_to_sub_path_id, = self._unpack_byte(1)                 # 1 byte - 8 bits
                 self.ref_to_sub_clip_id, = self._unpack_byte(1)                 # 1 byte - 8 bits
                 ref, = self._unpack_byte(2)                                     # 2 bytes - 16 bits
                 self.ref_to_stream_pid = '0x{:<04x}'.format(ref)
 
-            elif self.stream_type in {int(0x03), int(0x04)}:
+            elif self.stream_type in {0x03, 0x04}:
                 self.ref_to_sub_path_id, = self._unpack_byte(1)                 # 1 byte - 8 bits
                 ref, = self._unpack_byte(2)                                     # 2 bytes - 16 bits
                 self.ref_to_stream_pid = '0x{:<04x}'.format(ref)
@@ -77,15 +77,15 @@ class StreamAttributes(MplsObject):
         if self.length != 0:
             self.stream_coding_type, = self._unpack_byte(1)                     # 1 byte - 8 bits
 
-            if self.stream_coding_type in {int(0x01), int(0x02), int(0x1B), int(0xEA)}:
+            if self.stream_coding_type in {0x01, 0x02, 0x1B, 0xEA}:
                 # byte = "{0:08b}".format(self.mpls.read(1)[0])
-                # self.video_format = int(byte[:4], 2)
-                # self.framerate = int(byte[4:], 2)
+                # self.video_format = byte[:4], 2)
+                # self.framerate = byte[4:], 2)
                 video_format_and_framerate, = self._unpack_byte(1)              # 1 byte - 8 bits
                 self.video_format = video_format_and_framerate >> 4
                 self.framerate = video_format_and_framerate - (self.video_format << 4)
 
-            elif self.stream_coding_type == int(0x24):
+            elif self.stream_coding_type == 0x24:
                 video_format_and_framerate, = self._unpack_byte(1)              # 1 byte - 8 bits
                 self.video_format = video_format_and_framerate >> 4
                 self.framerate = video_format_and_framerate - (self.video_format << 4)
@@ -96,19 +96,19 @@ class StreamAttributes(MplsObject):
 
                 self.cr_flag_and_hdr_plus_flag, = self._unpack_byte(1)           # 1 byte - 8 bits
 
-            elif self.stream_coding_type in {int(0x03), int(0x04), int(0x80), int(0x81),
-                                             int(0x82), int(0x83), int(0x84), int(0x85),
-                                             int(0x86), int(0xA1), int(0xA2)}:
+            elif self.stream_coding_type in {0x03, 0x04, 0x80, 0x81,
+                                             0x82, 0x83, 0x84, 0x85,
+                                             0x86, 0xA1, 0xA2}:
                 audio_format_and_samplerate, = self._unpack_byte(1)             # 1 byte - 8 bits
                 self.audio_format = audio_format_and_samplerate >> 4
                 self.samplerate = audio_format_and_samplerate - (self.audio_format << 4)
 
                 self.language_code = self.mpls.read(3).decode('utf-8')          # 3 bytes - 24 bits
 
-            elif self.stream_coding_type in {int(0x90), int(0x91)}:
+            elif self.stream_coding_type in {0x90, 0x91}:
                 self.language_code = self.mpls.read(3).decode('utf-8')          # 3 bytes - 24 bits
 
-            elif self.stream_coding_type == int(0x92):
+            elif self.stream_coding_type == 0x92:
                 self.character_code, = self._unpack_byte(1)                     # 1 byte - 8 bits
 
                 if self.character_code in CHARACTER_CODE:
@@ -125,26 +125,26 @@ class StreamAttributes(MplsObject):
 
 
 STREAM_CODING_TYPE: Dict[int, str] = {
-    int(0x01): 'MPEG-1 video stream',
-    int(0x02): 'MPEG-2 video stream',
-    int(0x1B): 'MPEG-4 AVC video stream',
-    int(0x20): 'MPEG-4 MVC video stream',
-    int(0xEA): 'SMTPE VC-1 video stream',
-    int(0x24): 'HEVC video stream (including DV stream)',
-    int(0x03): 'MPEG-1 audio stream',
-    int(0x04): 'MPEG-2 audio stream',
-    int(0x80): 'LPCM audio stream (primary audio)',
-    int(0x81): 'Dolby Digital audio stream (primary audio)',
-    int(0x82): 'DTS audio stream (primary audio)',
-    int(0x83): 'Dolby Digital TrueHD audio stream (primary audio)',
-    int(0x84): 'Dolby Digital Plus audio stream (primary audio)',
-    int(0x85): 'DTS-HD High Resolution Audio audio stream (primary audio)',
-    int(0x86): 'DTS-HD Master Audio audio stream (primary audio)',
-    int(0xA1): 'Dolby Digital Plus audio stream (secondary audio)',
-    int(0xA2): 'DTS-HD audio stream (secondary audio)',
-    int(0x90): 'Presentation Graphics stream',
-    int(0x91): 'Interactive Graphics stream',
-    int(0x92): 'Text Subtitle stream'
+    0x01: 'MPEG-1 video stream',
+    0x02: 'MPEG-2 video stream',
+    0x1B: 'MPEG-4 AVC video stream',
+    0x20: 'MPEG-4 MVC video stream',
+    0xEA: 'SMTPE VC-1 video stream',
+    0x24: 'HEVC video stream (including DV stream)',
+    0x03: 'MPEG-1 audio stream',
+    0x04: 'MPEG-2 audio stream',
+    0x80: 'LPCM audio stream (primary audio)',
+    0x81: 'Dolby Digital audio stream (primary audio)',
+    0x82: 'DTS audio stream (primary audio)',
+    0x83: 'Dolby Digital TrueHD audio stream (primary audio)',
+    0x84: 'Dolby Digital Plus audio stream (primary audio)',
+    0x85: 'DTS-HD High Resolution Audio audio stream (primary audio)',
+    0x86: 'DTS-HD Master Audio audio stream (primary audio)',
+    0xA1: 'Dolby Digital Plus audio stream (secondary audio)',
+    0xA2: 'DTS-HD audio stream (secondary audio)',
+    0x90: 'Presentation Graphics stream',
+    0x91: 'Interactive Graphics stream',
+    0x92: 'Text Subtitle stream'
 }
 
 VIDEO_FORMAT: Dict[int, str] = {
@@ -180,28 +180,28 @@ COLOR_SPACE: Dict[int, str] = {
 }
 
 AUDIO_FORMAT: Dict[int, str] = {
-    int(0x01): 'mono',
-    int(0x06): 'stereo',
-    int(0x06): 'multichannel',
-    int(0x0C): 'stereo and multichannel',
+    0x01: 'mono',
+    0x03: 'stereo',
+    0x06: 'multichannel',
+    0x0C: 'stereo and multichannel',
 }
 
 SAMPLE_RATE: Dict[int, str] = {
-    int(0x01): '48 KHz',
-    int(0x04): '96 KHz',
-    int(0x05): '192 KHz',
-    int(0x0C): '48 & 192 KHz',
-    int(0x0E): '48 & 96 KHz',
+    0x01: '48 KHz',
+    0x04: '96 KHz',
+    0x05: '192 KHz',
+    0x0C: '48 & 192 KHz',
+    0x0E: '48 & 96 KHz',
 }
 
 CHARACTER_CODE: Dict[int, str] = {
-    int(0x01): 'utf-8',
-    int(0x02): 'utf_16_be',
-    int(0x03): 'shift_jis',
-    int(0x04): 'euc_kr',
-    int(0x05): 'gb18030',
-    int(0x06): 'gb2312',
-    int(0x07): 'big5',
+    0x01: 'utf-8',
+    0x02: 'utf_16_be',
+    0x03: 'shift_jis',
+    0x04: 'euc_kr',
+    0x05: 'gb18030',
+    0x06: 'gb2312',
+    0x07: 'big5',
 }
 
 
@@ -322,7 +322,7 @@ class PlayItem(MplsObject):
             self.misc_flags_2, = self._unpack_byte(1)                           # 1 byte - 8 bits
 
             self.still_mode, = self._unpack_byte(1)                             # 1 byte - 8 bits
-            if self.still_mode == int(0x01):
+            if self.still_mode == 0x01:
                 self.still_time, = self._unpack_byte(2)                         # 2 bytes - 16 bits
             else:
                 self.mpls.read(2)                                               # 2 bytes - 16 bits - Reserved
