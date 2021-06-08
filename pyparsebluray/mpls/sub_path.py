@@ -28,7 +28,7 @@ class SubPlayItem(MplsObject):
     sync_play_item_id: Optional[int]
     sync_start_pts: Optional[int]
     nb_multi_clip_entries: Optional[int]
-    multi_clip_entries: Optional[List[MultiClipEntry]] = []
+    multi_clip_entries: Optional[List[MultiClipEntry]]
 
     def load(self):
         pos = self._get_pos()
@@ -54,7 +54,7 @@ class SubPlayItem(MplsObject):
                     clip_info = self.mpls.read(5).decode('utf-8')               # 5 bytes - 40 bits
                     clip_codec = self.mpls.read(4).decode('utf-8')              # 4 bytes - 32 bits
                     ref, = self._unpack_byte(1)                                 # 1 byte - 8 bits
-                    self.multi_clip_entries += [MultiClipEntry(clip_info, clip_codec, ref)]
+                    self.multi_clip_entries.append(MultiClipEntry(clip_info, clip_codec, ref))
 
         self.mpls.seek(pos + self.length + 2)
 
@@ -67,7 +67,7 @@ class SubPath(MplsObject):
     sub_path_type: Optional[int]
     misc_flags_1: Optional[int]
     nb_sub_play_items: Optional[int]
-    sub_play_items: Optional[List[SubPlayItem]] = []
+    sub_play_items: Optional[List[SubPlayItem]]
 
     def load(self):
         pos = self._get_pos()
@@ -81,7 +81,7 @@ class SubPath(MplsObject):
             self.mpls.read(1)
             self.nb_sub_play_items, = self._unpack_byte(1)                      # 1 byte - 8 bits
 
-            self.sub_play_items += [SubPlayItem(self.mpls).load() for _ in range(self.nb_sub_play_items)]
+            self.sub_play_items = [SubPlayItem(self.mpls).load() for _ in range(self.nb_sub_play_items)]
 
         self.mpls.seek(pos + self.length + 4)
 

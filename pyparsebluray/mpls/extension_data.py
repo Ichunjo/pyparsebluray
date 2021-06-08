@@ -21,7 +21,7 @@ class ExtensionData(MplsObject):
     length: int
     data_block_start_address: Optional[int]
     nb_ext_data_entries: Optional[int]
-    ext_data_entries: Optional[List[ExtensionDataEntry]] = []
+    ext_data_entries: Optional[List[ExtensionDataEntry]]
 
     def load(self):
         pos = self._get_pos()
@@ -40,10 +40,10 @@ class ExtensionData(MplsObject):
                     ext_data_start_address, = self._unpack_byte(4)              # 4 bytes - 32 bits
                     ext_data_length, = self._unpack_byte(4)                     # 4 bytes - 32 bits
 
-                    self.ext_data_entries += [
+                    self.ext_data_entries.append(
                         ExtensionDataEntry(ext_data_type, ext_data_version,
                                            ext_data_start_address, ext_data_length)
-                    ]
+                    )
 
         self.mpls.seek(pos + self.length + 4)
 

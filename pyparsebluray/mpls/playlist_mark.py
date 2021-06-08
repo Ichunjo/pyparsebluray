@@ -17,7 +17,7 @@ class PlaylistMarks(MplsObject):
     """https://github.com/lw/BluRay/wiki/PlayListMark"""
     length: int
     nb_playlist_marks: Optional[int]
-    playlist_marks: Optional[List[PlaylistMark]] = []
+    playlist_marks: Optional[List[PlaylistMark]]
 
     def load(self):
         pos = self._get_pos()
@@ -36,10 +36,10 @@ class PlaylistMarks(MplsObject):
                     entry_espid, = self._unpack_byte(2)                         # 2 bytes - 16 bits
                     duration, = self._unpack_byte(4)                            # 4 bytes - 32 bits
 
-                    self.playlist_marks += [
+                    self.playlist_marks.append(
                         PlaylistMark(mark_type, ref_to_play_item_id,
                                      mark_timestamp, entry_espid, duration)
-                    ]
+                    )
 
         self.mpls.seek(pos + self.length + 4)
 

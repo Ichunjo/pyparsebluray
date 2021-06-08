@@ -130,14 +130,16 @@ class STNTable(MplsObject):
     nb_seco_video_stream_entries: Optional[int]
     nb_seco_pgs_stream_entries: Optional[int]
     nb_dv_stream_entries: Optional[int]
-    prim_video_stream_entries: EntryStreams = []
-    prim_audio_stream_entries: EntryStreams = []
-    prim_pgs_stream_entries: EntryStreams = []
-    seco_pgs_stream_entries: EntryStreams = []
-    prim_igs_stream_entries: EntryStreams = []
-    seco_audio_stream_entries: EntryStreams = []
-    seco_video_stream_entries: EntryStreams = []
-    dv_stream_entries: EntryStreams = []
+    prim_video_stream_entries: Optional[EntryStreams]
+    prim_audio_stream_entries: Optional[EntryStreams]
+    prim_pgs_stream_entries: Optional[EntryStreams]
+    seco_pgs_stream_entries: Optional[EntryStreams]
+    prim_igs_stream_entries: Optional[EntryStreams]
+    seco_audio_stream_entries: Optional[EntryStreams]
+    seco_video_stream_entries: Optional[EntryStreams]
+    dv_stream_entries: Optional[EntryStreams]
+
+    stream_entries: Tuple
 
     def load(self):
         pos = self._get_pos()
@@ -157,24 +159,28 @@ class STNTable(MplsObject):
             self.mpls.read(4)                                                   # 4 bytes - 32 bits - Reserved
 
 
-            nbs = [
+            nbs = (
                 self.nb_prim_video_stream_entries, self.nb_prim_audio_stream_entries,
                 self.nb_prim_pgs_stream_entries, self.nb_seco_pgs_stream_entries,
                 self.nb_prim_igs_stream_entries, self.nb_seco_audio_stream_entries,
                 self.nb_seco_video_stream_entries, self.nb_dv_stream_entries
-            ]
-            entries = [
-                self.prim_video_stream_entries, self.prim_audio_stream_entries,
-                self.prim_pgs_stream_entries, self.seco_pgs_stream_entries,
-                self.prim_igs_stream_entries, self.seco_audio_stream_entries,
-                self.seco_video_stream_entries, self.dv_stream_entries
-            ]
+            )
 
-            for nb, entry in zip(nbs, entries):
+            __stream_entries: List[EntryStreams] = []
+
+            for nb in nbs:
+                entry_streams: EntryStreams = []
                 for _ in range(nb):
                     stream_entry = StreamEntry(self.mpls).load()
                     stream_attributes = StreamAttributes(self.mpls).load()
-                    entry += [(stream_entry, stream_attributes)]
+                    entry_streams.append((stream_entry, stream_attributes))
+                __stream_entries.append(entry_streams)
+
+            self.prim_video_stream_entries, self.prim_audio_stream_entries, \
+                self.prim_pgs_stream_entries, self.seco_pgs_stream_entries, \
+                self.prim_igs_stream_entries, self.seco_audio_stream_entries, \
+                self.seco_video_stream_entries, self.dv_stream_entries = __stream_entries
+
 
         self.mpls.seek(pos + self.length + 2)
 
@@ -204,7 +210,7 @@ class PlayItem(MplsObject):
     still_time: Optional[int]
     nb_angles: Optional[int]
     misc_flags_3: Optional[int]
-    angles: Optional[List[Angle]] = []
+    angles: Optional[List[Angle]]
     stn_table: Optional[STNTable]
 
     def load(self):
@@ -239,7 +245,7 @@ class PlayItem(MplsObject):
                     clip_info = self.mpls.read(5).decode('utf-8')               # 5 bytes - 40 bits
                     clip_codec = self.mpls.read(4).decode('utf-8')              # 4 bytes - 32 bits
                     ref, = self._unpack_byte(1)                                 # 1 byte - 8 bits
-                    self.angles += [Angle(clip_info, clip_codec, ref)]
+                    self.angles.append(Angle(clip_info, clip_codec, ref))
 
             self.stn_table = STNTable(self.mpls).load()
 
