@@ -33,6 +33,8 @@ class ExtensionData(MplsObject):
             self.mpls.read(3)                                                   # 3 bytes - 24 bits - Reserved
             self.nb_ext_data_entries, = self._unpack_byte(1)                    # 1 byte - 8 bits
 
+            self.ext_data_entries = []
+
             if self.nb_ext_data_entries > 0:
                 for _ in range(self.nb_ext_data_entries):
                     ext_data_type, = self._unpack_byte(2)                       # 2 bytes - 16 bits

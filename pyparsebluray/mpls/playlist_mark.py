@@ -27,6 +27,8 @@ class PlaylistMarks(MplsObject):
         if self.length != 0:
             self.nb_playlist_marks, = self._unpack_byte(2)                      # 2 bytes - 16 bits
 
+            self.playlist_marks = []
+
             if self.nb_playlist_marks > 0:
                 for _ in range(self.nb_playlist_marks):
                     self.mpls.read(1)                                           # 1 byte - 8 bits - Reserved
