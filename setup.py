@@ -18,7 +18,7 @@ setuptools.setup(
     description='Parse and extract binary data from bluray files',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    packages=['pyparsebluray'],
+    packages=['pyparsebluray', 'pyparsebluray.mpls'],
     url='https://github.com/Ichunjo/pyparsebluray',
     zip_safe=False,
     classifiers=[
