@@ -19,6 +19,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=['pyparsebluray', 'pyparsebluray.mpls'],
+    package_data={
+        'pyparsebluray': ['py.typed'],
+    },
     url='https://github.com/Ichunjo/pyparsebluray',
     zip_safe=False,
     classifiers=[
