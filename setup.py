@@ -8,7 +8,7 @@ with open("requirements.txt") as fh:
     install_requires = fh.read()
 
 NAME = 'pyparsebluray'
-VERSION = '0.1.0'
+VERSION = '0.1.1'
 
 setuptools.setup(
     name=NAME,
