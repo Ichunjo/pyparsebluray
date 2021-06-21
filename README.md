@@ -2,6 +2,16 @@
 
 Parse and extract binary data from bluray files
 
+# Installation
+```
+python -m pip install pyparasebluray
+```
+or from Github:
+```
+python -m pip install git+https://github.com/Ichunjo/pyparasebluray.git
+```
+
+
 
 # Example
 
