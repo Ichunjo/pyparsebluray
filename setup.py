@@ -25,6 +25,7 @@ setuptools.setup(
     url='https://github.com/Ichunjo/pyparsebluray',
     zip_safe=False,
     classifiers=[
+        "Intended Audience :: Developers",
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
