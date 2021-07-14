@@ -6,7 +6,7 @@ with open('README.md') as fh:
 
 
 NAME = 'pyparsebluray'
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 
 setuptools.setup(
     name=NAME,
