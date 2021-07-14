@@ -5,6 +5,7 @@ __all__ = ['MoviePlaylist']
 
 from abc import ABC, abstractmethod
 from io import BufferedReader
+from pprint import pformat
 from struct import unpack
 from typing import Any, Dict, Tuple
 
@@ -18,22 +19,7 @@ class MplsObject(ABC):
         super().__init__()
 
     def __repr__(self) -> str:
-        try:
-            from prettyprinter import pretty_call, pretty_repr, register_pretty
-            from prettyprinter.doc import Doc
-            from prettyprinter.prettyprinter import PrettyContext
-
-            @register_pretty(MplsObject)
-            def _repr(value: object, ctx: PrettyContext) -> Doc:
-                dic = vars(value)
-                del dic['mpls']
-                return pretty_call(ctx, MplsObject, dic)
-
-            return pretty_repr(self)
-        except ImportError:
-            from pprint import pformat
-
-            return pformat(vars(self), sort_dicts=False)
+        return pformat(vars(self), sort_dicts=False)
 
     @abstractmethod
     def load(self):

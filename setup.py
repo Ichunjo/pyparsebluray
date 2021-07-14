@@ -4,8 +4,6 @@ import setuptools
 with open('README.md') as fh:
     long_description = fh.read()
 
-with open("requirements.txt") as fh:
-    install_requires = fh.read()
 
 NAME = 'pyparsebluray'
 VERSION = '0.1.2'
@@ -31,5 +29,4 @@ setuptools.setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.9',
-    install_requires=install_requires,
 )
