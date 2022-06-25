@@ -330,6 +330,7 @@ class PlayItem(MplsObject):
             if self.is_multi_angle:
                 self.nb_angles, = self._unpack_byte(1)                          # 1 byte - 8 bits
                 self.misc_flags_3, = self._unpack_byte(1)                       # 1 byte - 8 bits
+                self.angles = []
 
                 for _ in range(self.nb_angles):
                     clip_info = self.mpls.read(5).decode('utf-8')               # 5 bytes - 40 bits
